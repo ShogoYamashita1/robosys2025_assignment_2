@@ -28,10 +28,13 @@ with mp_hands.Hands(
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     image = cv2.flip(image, 1)# 画像を左右反転
-
     results = hands.process(image)# 推論
 
     height, width, _ = image.shape
+    close_state = [0]*5
+    B = [0]*5
+    G = [255]*5
+    res = 0
 
     # Draw the hand annotations on the image.
     image.flags.writeable = True
@@ -90,16 +93,33 @@ with mp_hands.Hands(
         palm   = (math.sqrt( (X09 - X00)**2 + (Y09 - Y00)**2 ))
 
         fingers = [thumb, index, middle, ring, pinky]
-        B = [0]*5
-        G = [255]*5
 
         for fin, i in zip(fingers, range(5)):
             if(fin < palm):
+                close_state[i] = 1
                 B[i] = 255
                 G[i] = 0
             else:
+                close_state[i] = 0
                 B[i] = 0
                 G[i] = 255
+
+        if (all(i == 0 for i in close_state)):
+            res = 1# パー
+            cv2.putText(image, "pha", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+
+        elif (all(i == 1 for i in close_state)):
+            res = 2# グー
+            cv2.putText(image, "ghu", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+
+        elif (close_state == [1, 0, 0, 1, 1]):
+            res = 3#チョキ
+            cv2.putText(image, "choki", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+
+        else:
+            res = 0#none
+            cv2.putText(image, "none", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+
 
         cv2.putText(image, f"THUMP({thumb:.0f})",   (0,  30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[0], G[0], 0), 2)
         cv2.putText(image, f"INDEX({index:.0f})",   (0,  60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[1], G[1], 0), 2)
@@ -107,6 +127,7 @@ with mp_hands.Hands(
         cv2.putText(image, f"RING({ring:.0f})",     (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[3], G[3], 0), 2)
         cv2.putText(image, f"PINKY({pinky:.0f})",   (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[4], G[4], 0), 2)
         cv2.putText(image, f"PALM({palm:.0f})",     (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+        #cv2.putText(image, f"RESULT({res})",        (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
     # Flip the image horizontally for a selfie-view display.
     cv2.imshow('MediaPipe Hands', image)
