@@ -1,4 +1,6 @@
 from setuptools import find_packages, setup
+import os
+from glob import glob
 
 package_name = 'robosys2025_assignment_2'
 
@@ -10,6 +12,7 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name), glob('launch/*.launch.py'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -24,6 +27,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
+            'talker = robosys2025_assignment_2.talker:main',
+            'listener = robosys2025_assignment_2.listener:main',
+            'hand = robosys2025_assignment_2.hand_input:main',
         ],
     },
 )
