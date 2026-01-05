@@ -14,7 +14,7 @@ mp_hands = mp.solutions.hands
 
 class Talker():
     def __init__(self, nh):
-        self.pub = nh.create_publisher(Int16MultiArray, "hand_result", 10)
+        self.pub = nh.create_publisher(Int16MultiArray, "finger_close_state", 10)
 
     def publish(self, state):
         msg = Int16MultiArray()

@@ -4,7 +4,7 @@ from std_msgs.msg import Int16MultiArray
 
 class Listener():
     def __init__(self, nh):
-        self.sub = nh.create_subscription(Int16MultiArray, "hand_result", self.cb, 10)
+        self.sub = nh.create_subscription(Int16MultiArray, "finger_close_state", self.cb, 10)
         self.nh = nh # ノードを属性に設定
 
     def cb(self, msg):
