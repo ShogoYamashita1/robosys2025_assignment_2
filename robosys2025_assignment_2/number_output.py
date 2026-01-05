@@ -1,3 +1,7 @@
+#!/usr/bin/python3
+# SPDX-FileCopyrightText: 2025-2026 Shogo Yamashita
+# SPDX-License-Identifier: Apache-2.0
+
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import Int16MultiArray
