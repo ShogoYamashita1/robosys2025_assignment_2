@@ -5,7 +5,7 @@ import mediapipe as mp
 import math
 import rclpy
 from rclpy.node import Node
-from std_msgs.msg import Int16
+from std_msgs.msg import Int16MultiArray
 
 mp_drawing = mp.solutions.drawing_utils
 mp_drawing_styles = mp.solutions.drawing_styles
@@ -14,11 +14,11 @@ mp_hands = mp.solutions.hands
 
 class Talker():
     def __init__(self, nh):
-        self.pub = nh.create_publisher(Int16, "countup", 10)
+        self.pub = nh.create_publisher(Int16MultiArray, "hand_result", 10)
 
-    def publish(self, res):
-        msg = Int16()
-        msg.data = res
+    def publish(self, state):
+        msg = Int16MultiArray()
+        msg.data = state
         self.pub.publish(msg)
 
 def hand_process(cap, hands):
@@ -44,7 +44,7 @@ def hand_process(cap, hands):
         close_state = [0]*5
         B = [0]*5
         G = [255]*5
-        res = 0
+        result = 0
 
         # Draw the hand annotations on the image.
         image.flags.writeable = True
@@ -115,19 +115,19 @@ def hand_process(cap, hands):
                     G[i] = 255
 
             if (all(i == 0 for i in close_state)):
-                res = 1# パー
+                result = 1# パー
                 cv2.putText(image, "pha", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
             elif (all(i == 1 for i in close_state)):
-                res = 2# グー
+                result = 2# グー
                 cv2.putText(image, "ghu", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
             elif (close_state == [1, 0, 0, 1, 1]):
-                res = 3#チョキ
+                result = 3#チョキ
                 cv2.putText(image, "choki", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
             else:
-                res = 0#none
+                result = 0#none
                 cv2.putText(image, "none", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
 
@@ -137,7 +137,7 @@ def hand_process(cap, hands):
             cv2.putText(image, f"RING({ring:.0f})",     (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[3], G[3], 0), 2)
             cv2.putText(image, f"PINKY({pinky:.0f})",   (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[4], G[4], 0), 2)
             cv2.putText(image, f"PALM({palm:.0f})",     (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-            #cv2.putText(image, f"RESULT({res})",        (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+            #cv2.putText(image, f"RESULT({result})",        (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
         # Flip the image horizontally for a selfie-view display.
         cv2.imshow('MediaPipe Hands', image)
@@ -145,7 +145,7 @@ def hand_process(cap, hands):
           #break
           return True
 
-        return res, False
+        return close_state, False
 
 
 def main():
@@ -163,9 +163,9 @@ def main():
 
     node = Node("talker")
     talker = Talker(node)
-    while True:
-        res, flag = hand_process(cap, hands)
-        talker.publish(res)
+    while rclpy.ok():
+        state, flag = hand_process(cap, hands)
+        talker.publish(state)
         rclpy.spin_once(node, timeout_sec=0.001)
         if flag:
             break
