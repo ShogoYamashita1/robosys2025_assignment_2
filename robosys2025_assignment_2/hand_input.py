@@ -23,14 +23,11 @@ class Talker():
 
 def hand_process(cap, hands):
 # For webcam input:
-      #while cap.isOpened():
       if cap.isOpened():
         success, image = cap.read()
         if not success:
           print("Ignoring empty camera frame.")
-          # If loading a video, use 'break' instead of 'continue'.
-          #continue
-          return 0, False
+          return None, False
 
         # To improve performance, optionally mark the image as not writeable to
         # pass by reference.
@@ -114,22 +111,6 @@ def hand_process(cap, hands):
                     B[i] = 0
                     G[i] = 255
 
-            if (all(i == 0 for i in close_state)):
-                result = 1# パー
-                cv2.putText(image, "pha", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-
-            elif (all(i == 1 for i in close_state)):
-                result = 2# グー
-                cv2.putText(image, "ghu", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-
-            elif (close_state == [1, 0, 0, 1, 1]):
-                result = 3#チョキ
-                cv2.putText(image, "choki", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-
-            else:
-                result = 0#none
-                cv2.putText(image, "none", (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-
 
             cv2.putText(image, f"THUMP({thumb:.0f})",   (0,  30), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[0], G[0], 0), 2)
             cv2.putText(image, f"INDEX({index:.0f})",   (0,  60), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[1], G[1], 0), 2)
@@ -137,21 +118,17 @@ def hand_process(cap, hands):
             cv2.putText(image, f"RING({ring:.0f})",     (0, 120), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[3], G[3], 0), 2)
             cv2.putText(image, f"PINKY({pinky:.0f})",   (0, 150), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (B[4], G[4], 0), 2)
             cv2.putText(image, f"PALM({palm:.0f})",     (0, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
-            #cv2.putText(image, f"RESULT({result})",        (0, 240), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
 
         # Flip the image horizontally for a selfie-view display.
         cv2.imshow('MediaPipe Hands', image)
         if cv2.waitKey(5) & 0xFF == 27:
-          #break
-          return True
+          return None, True
 
         return close_state, False
 
 
 def main():
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 
     hands = mp_hands.Hands(
         model_complexity=0,
