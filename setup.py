@@ -27,8 +27,9 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'janken_output = robosys2025_assignment_2.janken_output:main',
             'hand_input = robosys2025_assignment_2.hand_input:main',
+            'janken_output = robosys2025_assignment_2.janken_output:main',
+            'number_output = robosys2025_assignment_2.number_output:main',
         ],
     },
 )
