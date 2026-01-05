@@ -8,11 +8,11 @@ def generate_launch_description():
 
      talker = launch_ros.actions.Node(
          package='robosys2025_assignment_2',      #パッケージの名前を指定
-         executable='hand',  #実行するファイルの指定
+         executable='hand_input',  #実行するファイルの指定
          )
      listener = launch_ros.actions.Node(
          package='robosys2025_assignment_2',
-         executable='listener',
+         executable='janken_output',
          output='screen'        #ログを端末に出すための設定
          )
 

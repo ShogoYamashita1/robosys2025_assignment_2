@@ -27,9 +27,8 @@ setup(
     },
     entry_points={
         'console_scripts': [
-            'talker = robosys2025_assignment_2.talker:main',
-            'listener = robosys2025_assignment_2.listener:main',
-            'hand = robosys2025_assignment_2.hand_input:main',
+            'janken_output = robosys2025_assignment_2.janken_output:main',
+            'hand_input = robosys2025_assignment_2.hand_input:main',
         ],
     },
 )
