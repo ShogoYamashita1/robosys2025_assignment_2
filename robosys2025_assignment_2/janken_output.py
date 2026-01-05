@@ -22,19 +22,19 @@ class Janken(Node):
 
 def judge(close_state):
         if close_state is None:
-            return "0"
+            return "None"
 
         if (all(i == 0 for i in close_state)):
-            return "1"# パー
+            return "Paper"# パー
 
         elif (all(i == 1 for i in close_state)):
-            return "2"# グー
+            return "Rock"# グー
 
         elif (close_state == [1, 0, 0, 1, 1]):
-            return "3"#チョキ
+            return "Scissors"#チョキ
 
         else:
-            return "0"#none
+            return "None"
 
 
 def main():
