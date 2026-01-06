@@ -13,7 +13,7 @@
 
 ## 動作環境
 - OS: Ubuntu 22.04
-- ROS2: Humble
+- ROS 2: Humble
 
 ## 起動方法
 ### hand_node + janken_node
@@ -27,15 +27,15 @@ ros2 launch robosys2025_assignment_2 number_out.launch.py
 ```
 
 ## 説明
-### ノード構成
-- hand_node  
-  MediaPipe を用いて指の開閉状態を判定し、配列として publish する。
+### ノード一覧
+#### hand_node
+- MediaPipe を用いて指の開閉状態を判定し、配列として publish する。
 
-- janken_node  
-  指の開閉配列を受信し、じゃんけん（グー・チョキ・パー）を判定して文字列として publish する。
+#### janken_node
+- 指の開閉配列を受信し、じゃんけん（グー・チョキ・パー）を判定して文字列として publish する。
 
-- number_node  
-  指の開閉配列を受信し、手で表された数字を判定して publish する。
+#### number_node
+- 指の開閉配列を受信し、手で表された数字を判定して publish する。
 
 ### トピック一覧
 #### finger_close_state (std_msgs/Int16MultiArray)
