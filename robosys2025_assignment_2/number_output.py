@@ -11,7 +11,7 @@ class Handnumber_node(Node):
     def __init__(self):
         super().__init__('number_node')
         self.sub = self.create_subscription(Int16MultiArray, "finger_close_state", self.cb, 10)
-        self.pub = self.create_publisher(Int16, "hand_result", 10)
+        self.pub = self.create_publisher(Int16, "number_result", 10)
         self.listened_data = None
 
     def cb(self, msg):

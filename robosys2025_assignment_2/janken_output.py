@@ -11,7 +11,7 @@ class Janken_node(Node):
     def __init__(self):
         super().__init__('janken_node')
         self.sub = self.create_subscription(Int16MultiArray, "finger_close_state", self.cb, 10)
-        self.pub = self.create_publisher(String, "hand_result", 10)
+        self.pub = self.create_publisher(String, "janken_result", 10)
         self.listened_data = None
 
     def cb(self, msg):
