@@ -30,15 +30,15 @@ ros2 launch robosys2025_assignment_2 number_out.launch.py
 ### ノード一覧
 #### hand_node
 - MediaPipe を用いて指の開閉状態を判定する
-- 配列として publish する。
+- 配列として publish する
 
 #### janken_node
 - 指の開閉配列を受信し、じゃんけん（グー・チョキ・パー）を判定する
-- 文字列として publish する。
+- 文字列として publish する
 
 #### number_node
 - 指の開閉配列を受信し、手で表された数字を判定する
-- 数値として publish する。
+- 数値として publish する
 
 ### トピック一覧
 #### finger_close_state (std_msgs/Int16MultiArray)
