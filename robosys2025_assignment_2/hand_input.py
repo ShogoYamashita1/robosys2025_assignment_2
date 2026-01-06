@@ -14,7 +14,7 @@ mp_drawing_styles = mp.solutions.drawing_styles
 mp_hands = mp.solutions.hands
 
 
-class Talker():
+class Hand_node():
     def __init__(self, nh):
         self.pub = nh.create_publisher(Int16MultiArray, "finger_close_state", 10)
 
@@ -140,8 +140,8 @@ def main():
 
     rclpy.init()
 
-    node = Node("talker")
-    talker = Talker(node)
+    node = Node("hand_node")
+    talker = Hand_node(node)
     while rclpy.ok():
         state, flag = hand_process(cap, hands)
         talker.publish(state)

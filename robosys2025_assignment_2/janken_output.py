@@ -7,9 +7,9 @@ from rclpy.node import Node
 from std_msgs.msg import Int16MultiArray
 from std_msgs.msg import String
 
-class Janken(Node):
+class Janken_node(Node):
     def __init__(self):
-        super().__init__('janken')
+        super().__init__('janken_node')
         self.sub = self.create_subscription(Int16MultiArray, "finger_close_state", self.cb, 10)
         self.pub = self.create_publisher(String, "hand_result", 10)
         self.listened_data = None
@@ -43,7 +43,7 @@ def judge(close_state):
 
 def main():
     rclpy.init()
-    node = Janken()
+    node = Janken_node()
 
     while rclpy.ok():
         rclpy.spin_once(node, timeout_sec=0.001)
