@@ -1,30 +1,13 @@
 # 手指認識を用いたじゃんけん・数字判定 ROS 2 パッケージ
 
+
 ## 概要
 本パッケージは、MediaPipe を用いて指の開閉状態を判定するノードと、  
-その結果をもとに解釈処理をする2種類の加工ノードから構成されるROS 2用パッケージである。
+その結果をもとに解釈処理をする2種類の加工ノードから構成される ROS 2 用パッケージです。  
+指の開閉状態の解釈の幅を持たせるため、判定ノードと加工ノードに分けています。
 
-また、それぞれのノードを組み合わせて起動する launch ファイルを提供する。
+また、それぞれのノードを組み合わせて起動する launch ファイルを提供します。
 
-## 必要なソフトウェア
-- Python: 3.10.12
-- MediaPipe: 0.10.21
-- OpenCV
-
-## 動作環境
-- OS: Ubuntu 22.04
-- ROS 2: Humble
-
-## 起動方法
-### hand_node + janken_node
-```bash
-ros2 launch robosys2025_assignment_2 janken_out.launch.py
-```
-
-### hand_node + number_node
-```bash
-ros2 launch robosys2025_assignment_2 number_out.launch.py
-```
 
 ## 説明
 ### ノード一覧
@@ -55,6 +38,50 @@ ros2 launch robosys2025_assignment_2 number_out.launch.py
 #### number_result (std_msgs/Int16)
 - 指で表された 0 ~ 5 の数字
 - 判定できない場合は -1
+
+
+## 準備
+### OpenCV のインストール
+hand_node の画面出力に使用
+```bash
+python3 -m pip install opencv-contrib-python
+```
+
+### MediaPipe のインストール
+hand_node のカメラ入力に使用
+```bash
+python3 -m pip install mediapipe==0.10.8
+```
+
+### インストールができない場合
+No module named pip と出てきた場合、pyton3 に pip がインストールされていない可能性があります。
+```bash
+sudo apt install python3-pip
+```
+
+
+## 実行方法
+### hand_node + janken_node
+```bash
+ros2 launch robosys2025_assignment_2 janken_out.launch.py
+```
+
+### hand_node + number_node
+```bash
+ros2 launch robosys2025_assignment_2 number_out.launch.py
+```
+
+
+## 必要なソフトウェア
+- Python: 3.10.12
+- MediaPipe: 0.10.8
+- OpenCV
+
+
+## 動作環境
+- OS: Ubuntu 22.04
+- ROS 2: Humble
+
 
 ## ライセンス
 このリポジトリはApache-2.0ライセンスで提供しています。  
