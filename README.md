@@ -1,4 +1,5 @@
 # 手指認識を用いたじゃんけん・数字判定 ROS 2 パッケージ
+![test](https://github.com/ShogoYamashita1/robosys2025_assignment_2/actions/workflows/test.yml/badge.svg)
 
 
 ## 概要
