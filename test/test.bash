@@ -12,11 +12,16 @@ ng () {
     fi
 }
 
+### 入出力チェック関数 ###
+in_out_check () {
+    ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [${2}]}" -1
+    ros2 topic echo /${1}_result --once > out.tmp
+    cat out.tmp | grep -- "${3}"
+}
 
 res=0
 ng_line=0
 dir=~
-
 
 [ "$1" != "" ] && dir="$1"
 
@@ -27,7 +32,7 @@ source $dir/.bashrc
 
 
 ### janken_outputの入力テスト ###
-timeout 30 ros2 run robosys2025_assignment_2 janken_output &
+ros2 run robosys2025_assignment_2 janken_output &
 sleep 3
 
 ## トピックチェック ##
@@ -39,42 +44,31 @@ ros2 topic info /janken_result | grep "std_msgs/msg/String"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
 ## 正常入力 ##
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,1,1,1,1]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "Rock"
+in_out_check "janken" "1,1,1,1,1" "Rock"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,0,1,1]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "Scissors"
+in_out_check "janken" "1,0,0,1,1" "Scissors"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [0,0,0,0,0]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "Paper"
+in_out_check "janken" "0,0,0,0,0" "Paper"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
 ## 異常入力 ##
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,0,0,0]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "None"
+in_out_check "janken" "1,0,0,0,0" "None"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [0,1,1,1,1]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "None"
+in_out_check "janken" "0,1,1,1,1" "None"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,1,0,1,1]}" -1
-ros2 topic echo /janken_result --once > out.tmp
-cat out.tmp | grep "None"
+in_out_check "janken" "1,1,0,1,1" "None"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 rm out.tmp
+pkill -x janken_output
 wait
 
 
 ### number_outputの入力テスト ###
-timeout 60 ros2 run robosys2025_assignment_2 number_output &
+ros2 run robosys2025_assignment_2 number_output &
 sleep 3
 
 ## トピックチェック ##
@@ -86,53 +80,36 @@ ros2 topic info /number_result | grep "std_msgs/msg/Int16"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
 ## 正常入力 ##
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,1,1,1,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "0"
+in_out_check "number" "1,1,1,1,1" "0"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,1,1,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "1"
+in_out_check "number" "1,0,1,1,1" "1"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,0,1,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "2"
+in_out_check "number" "1,0,0,1,1" "2"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,0,0,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "3"
+in_out_check "number" "1,0,0,0,1" "3"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,0,0,0,0]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "4"
+in_out_check "number" "1,0,0,0,0" "4"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [0,0,0,0,0]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep "5"
+in_out_check "number" "0,0,0,0,0" "5"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
 
 ## 異常入力 ##
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,1,0,0,0]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep -- "-1"
+in_out_check "number" "1,1,0,0,0" "-1"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [0,1,1,1,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep -- "-1"
+in_out_check "number" "0,1,1,1,1" "-1"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 
-ros2 topic pub /finger_close_state std_msgs/msg/Int16MultiArray "{data: [1,1,0,1,1]}" -1
-ros2 topic echo /number_result --once > out.tmp
-cat out.tmp | grep -- "-1"
+in_out_check "number" "1,1,0,1,1" "-1"
 [ "$?" = 0 ] || { ng_line="$LINENO" ; ng "$ng_line"; }
 rm out.tmp
+pkill -x number_output
 wait
 
 
@@ -144,5 +121,4 @@ else
     echo -e "\e[31mTest failed\e[0m"
 fi
 
-wait
 exit $res
