@@ -51,6 +51,8 @@ def main():
         janken_result = judge(close_state)
         node.publish(janken_result)
 
+    node.destroy_node()
+    rclpy.shutdown()
 
 
 if __name__ == "__main__":
