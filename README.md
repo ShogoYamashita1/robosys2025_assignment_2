@@ -12,7 +12,7 @@
 ## 説明
 ### ノード一覧
 #### hand_node
-- MediaPipe を用いて指の開閉状態を判定する
+- `MediaPipe` を用いて指の開閉状態を判定する
 - 配列として publish する
 
 #### janken_node
@@ -54,7 +54,7 @@ python3 -m pip install mediapipe==0.10.8
 ```
 
 ### インストールができない場合
-No module named pip と出てきた場合、pyton3 に pip がインストールされていない可能性があります。
+`No module named pip` と出てきた場合、pyton3 に pip がインストールされていない可能性があります。
 ```bash
 sudo apt install python3-pip
 ```
