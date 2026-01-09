@@ -51,7 +51,7 @@ python3 -m pip install opencv-contrib-python
 ### MediaPipe のインストール
 hand_node のカメラ入力に使用
 ```bash
-python3 -m pip install mediapipe==0.10.8
+python3 -m pip install mediapipe==0.10.21
 ```
 
 ### インストールができない場合
@@ -75,7 +75,7 @@ ros2 launch robosys2025_assignment_2 number_out.launch.py
 
 ## 必要なソフトウェア
 - Python: 3.10.12
-- MediaPipe: 0.10.8
+- MediaPipe: 0.10.21
 - OpenCV
 
 
